@@ -52,6 +52,9 @@ export default function App() {
   // ✨ TASK: BUILD YOUR EFFECT HERE
   // Whenever the state of the form changes, validate it against the schema
   // and update the state that tracks whether the form is submittable.
+  useEffect(() => {
+
+  }, [])
 
 
   const onChange = evt => {
@@ -60,6 +63,10 @@ export default function App() {
     // whether the type of event target is "checkbox" and act accordingly.
     // At every change, you should validate the updated value and send the validation
     // error to the state where we track frontend validation errors.
+    const { name, value, checked, type } = evt.target
+    const valueToUse = type === 'checkbox' ? checked : value
+    setErrors(name, valueToUse)
+    setForm({ ...form, [name]: valueToUse})
   }
 
   const onSubmit = evt => {
@@ -76,47 +83,47 @@ export default function App() {
     <div> {/* TASK: COMPLETE THE JSX */}
       <h2>Create an Account</h2>
       <form onSubmit={onSubmit}>
-        {serverSuccess && <h4 className="success">Success! Welcome, new user!</h4>}
-        {serverFailure && <h4 className="error">Sorry! Username is taken</h4>}
+        {serverSuccess && <h4 className="success">{serverSuccess}</h4>}
+        {serverFailure && <h4 className="error">{serverFailure}</h4>}
 
         <div className="inputGroup">
           <label htmlFor="username">Username:</label>
-          <input id="username" name="username" type="text" placeholder="Type Username" />
-          {serverFailure && <div className="validation">username is required</div>}
+          <input value={form.username} onChange={onChange} id="username" name="username" type="text" placeholder="Type Username" />
+          {errors.username && <div className="validation">{errors.username}</div>}
         </div>
 
         <div className="inputGroup">
           <fieldset>
             <legend>Favorite Language:</legend>
             <label>
-              <input type="radio" name="favLanguage" value="javascript" />
+              <input checked={form.favLanguage === 'javascript'} onChange={onChange} type="radio" name="favLanguage" value="javascript" />
               JavaScript
             </label>
             <label>
-              <input type="radio" name="favLanguage" value="rust" />
+              <input checked={form.favLanguage === 'rust'} onChange={onChange} type="radio" name="favLanguage" value="rust" />
               Rust
             </label>
           </fieldset>
-         {serverFailure && <div className="validation">favLanguage is required</div>}
+         {errors.favLanguage && <div className="validation">{errors.favLanguage}</div>}
         </div>
 
         <div className="inputGroup">
           <label htmlFor="favFood">Favorite Food:</label>
-          <select id="favFood" name="favFood">
+          <select value={form.favFood} onChange={onChange} id="favFood" name="favFood">
             <option value="">-- Select Favorite Food --</option>
             <option value="pizza">Pizza</option>
             <option value="spaghetti">Spaghetti</option>
             <option value="broccoli">Broccoli</option>
           </select>
-          {serverFailure && <div className="validation">favFood is required</div>}
+          {errors.favFood && <div className="validation">{errors.favFood}</div>}
         </div>
 
         <div className="inputGroup">
           <label>
-            <input id="agreement" type="checkbox" name="agreement" />
+            <input checked={form.agreement} onChange={onChange} id="agreement" type="checkbox" name="agreement" />
             Agree to our terms
           </label>
-          {serverFailure && <div className="validation">agreement is required</div>}
+          {errors.agreement && <div className="validation">{errors.agreement}</div>}
         </div>
 
         <div>
