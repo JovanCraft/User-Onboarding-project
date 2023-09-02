@@ -23,6 +23,29 @@ const e = { // This is a dictionary of validation error messages.
 // ✨ TASK: BUILD YOUR FORM SCHEMA HERE
 // The schema should use the error messages contained in the object above.
 
+const userSchema = yup.object().shape({
+  username: yup
+  .string()
+  .trim()
+  .required(e.usernameRequired)
+  .min(3, e.usernameMin)
+  .max(20, e.usernameMax),
+  favLanguage: yup
+  .string()
+  .required(e.favLanguageRequired)
+  .trim()
+  .oneOf(['javascript', 'rust'], e.favLanguageOptions),
+  favFood: yup
+  .string()
+  .required(e.favFoodRequired)
+  .trim()
+  .oneOf(['broccoli', 'spaghetti', 'pizza'], e.favFoodOptions),
+  agreement: yup
+  .boolean()
+  .required(e.agreementRequired)
+  .oneOf([true], e.agreementOptions)
+})
+
 const initialForm = {
   username: '',
   favLanguage: '',
@@ -35,7 +58,7 @@ const initialErrors = {
   favFood: '',
   agreement: ''
 }
-const initialDisable = true
+const initialDisable = false
 
 export default function App() {
   // ✨ TASK: BUILD YOUR STATES HERE
@@ -47,14 +70,16 @@ export default function App() {
   const [errors, setErrors] = useState(initialErrors)
   const [serverSuccess, setServerSuccess] = useState()
   const [serverFailure, setServerFailure] = useState()
-  const [disabled, setDisabled] = useState(initialDisable)
+  const [enabled, setEnabled] = useState(initialDisable)
 
   // ✨ TASK: BUILD YOUR EFFECT HERE
   // Whenever the state of the form changes, validate it against the schema
   // and update the state that tracks whether the form is submittable.
   useEffect(() => {
-
-  }, [])
+    userSchema.isValid(form).then(isValid => {
+      setEnabled(isValid)
+    })
+  }, [form])
 
 
   const onChange = evt => {
@@ -67,6 +92,14 @@ export default function App() {
     const valueToUse = type === 'checkbox' ? checked : value
     setForm({ ...form, [name]: valueToUse})
     setErrors(name, valueToUse)
+    yup.reach(userSchema, name)
+    .validate(valueToUse)
+    .then(() => {
+      setErrors({ ...errors, [name]: ''})
+    })
+    .catch(err => {
+      setErrors({ ...errors, [name]: err.errors[0]})
+    })
   }
 
   const onSubmit = evt => {
@@ -139,7 +172,7 @@ export default function App() {
         </div>
 
         <div>
-          <input type="submit" disabled={false} />
+          <input disabled={!enabled} type="submit" />
         </div>
       </form>
     </div>
