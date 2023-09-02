@@ -65,8 +65,8 @@ export default function App() {
     // error to the state where we track frontend validation errors.
     const { name, value, checked, type } = evt.target
     const valueToUse = type === 'checkbox' ? checked : value
-    setErrors(name, valueToUse)
     setForm({ ...form, [name]: valueToUse})
+    setErrors(name, valueToUse)
   }
 
   const onSubmit = evt => {
@@ -77,7 +77,19 @@ export default function App() {
     // in the states you have reserved for them, and the form
     // should be re-enabled.
     evt.preventDefault()
-  }
+    axios.post(`https://webapis.bloomtechdev.com/registration`, form)
+    .then(res => {
+      setServerFailure()
+      setServerSuccess(res.data.message)
+      setForm(initialForm)
+    })
+    .catch(err => {
+      setServerFailure(err.response.data.message)
+      setServerSuccess()
+    })
+
+}
+
 
   return (
     <div> {/* TASK: COMPLETE THE JSX */}
