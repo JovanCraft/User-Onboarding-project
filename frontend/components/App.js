@@ -69,19 +69,20 @@ export default function App() {
     // the form. You must put the success and failure messages from the server
     // in the states you have reserved for them, and the form
     // should be re-enabled.
+    evt.preventDefault()
   }
 
   return (
     <div> {/* TASK: COMPLETE THE JSX */}
       <h2>Create an Account</h2>
-      <form>
-        <h4 className="success">Success! Welcome, new user!</h4>
-        <h4 className="error">Sorry! Username is taken</h4>
+      <form onSubmit={onSubmit}>
+        {serverSuccess && <h4 className="success">Success! Welcome, new user!</h4>}
+        {serverFailure && <h4 className="error">Sorry! Username is taken</h4>}
 
         <div className="inputGroup">
           <label htmlFor="username">Username:</label>
           <input id="username" name="username" type="text" placeholder="Type Username" />
-          <div className="validation">username is required</div>
+          {serverFailure && <div className="validation">username is required</div>}
         </div>
 
         <div className="inputGroup">
@@ -96,7 +97,7 @@ export default function App() {
               Rust
             </label>
           </fieldset>
-          <div className="validation">favLanguage is required</div>
+         {serverFailure && <div className="validation">favLanguage is required</div>}
         </div>
 
         <div className="inputGroup">
@@ -107,7 +108,7 @@ export default function App() {
             <option value="spaghetti">Spaghetti</option>
             <option value="broccoli">Broccoli</option>
           </select>
-          <div className="validation">favFood is required</div>
+          {serverFailure && <div className="validation">favFood is required</div>}
         </div>
 
         <div className="inputGroup">
@@ -115,7 +116,7 @@ export default function App() {
             <input id="agreement" type="checkbox" name="agreement" />
             Agree to our terms
           </label>
-          <div className="validation">agreement is required</div>
+          {serverFailure && <div className="validation">agreement is required</div>}
         </div>
 
         <div>
