@@ -24,10 +24,10 @@ From the point of view of the data, each user registration POSTed to the endpoin
 
 ```js
 {
-  "username": "Luke", 
-  "favFood": "pizza", 
-  "favLanguage": "javascript", 
-  "agreement": true 
+  "username": "Luke",
+  "favFood": "pizza",
+  "favLanguage": "javascript",
+  "agreement": true
 }
 // ❗ Note that even if the payload passes validation, the server may reject the request if the username already exists
 ```
@@ -169,3 +169,6 @@ Do NOT delete your repository from GitHub! Instead, frequently commit as you wor
 </details>
 
 **Project created with [@bloomtools/react@0.1.10](https://github.com/bloominstituteoftechnology/npm-tools-react) and Node v18.17.1 on Tue, August 22, 2023 at 04:09 PM**
+
+
+
